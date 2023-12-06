@@ -11,7 +11,7 @@ class TasksModel(models.Model):
     about = models.TextField(blank=True, null=True)
 
     class Meta:
-        ordering = ['created']
+        ordering = ['-created']
 
     def __str__(self):
         return self.task
