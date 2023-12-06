@@ -3,9 +3,14 @@ from .serializers import TasksSerializer, AboutSerializer
 from .models import TasksModel
 
 
-class TasklistView(generics.ListCreateAPIView):
+class TaskCreateView(generics.CreateAPIView):
     queryset = TasksModel.objects.all()
     serializer_class = TasksSerializer
+
+
+class TasklistView(generics.ListAPIView):
+    queryset = TasksModel.objects.all()
+    serializer_class = AboutSerializer
 
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
