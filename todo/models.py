@@ -8,9 +8,11 @@ class TasksModel(models.Model):
     durations = models.IntegerField(blank=True, null=True)
     created = models.DateTimeField(auto_now=True)
     done = models.BooleanField(default=False, blank=True)
+    about = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ['created']
 
     def __str__(self):
         return self.task
+
