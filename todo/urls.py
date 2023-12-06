@@ -5,6 +5,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('tasks/', views.TasklistView.as_view(), name='tasks'),
+    path('tasks/create/',views.TaskCreateView.as_view(), name='create'),
     path('tasks/<int:pk>/', views.TaskDetailView.as_view(), name='task_detail'),
 ]
 
