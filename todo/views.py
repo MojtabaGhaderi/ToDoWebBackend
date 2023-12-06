@@ -1,13 +1,13 @@
 from rest_framework import generics
 from .serializers import TasksSerializer
-from .models import Tasks
+from .models import TasksModel
 
 
 class TasklistView(generics.ListCreateAPIView):
-    queryset = Tasks.objects.all()
+    queryset = TasksModel.objects.all()
     serializer_class = TasksSerializer
 
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Tasks.objects.all()
+    queryset = TasksModel.objects.all()
     serializer_class = TasksSerializer
