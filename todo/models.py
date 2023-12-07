@@ -20,5 +20,5 @@ class TasksModel(models.Model):
 
 class ProfilePictureModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_pic = models.ImageField(upload_to='profile_pictures')
+    profile_pic = models.ImageField(blank=True,upload_to='profile_pictures')
 
