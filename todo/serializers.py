@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
 
         if profile_pic_data:
-            ProfilePictureModel.objects.create_user(**profile_pic_data)
+            ProfilePictureModel.objects.create(user=user, **profile_pic_data)
         return user
 
 
