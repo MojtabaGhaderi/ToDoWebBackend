@@ -10,7 +10,7 @@ class UserCreateView(generics.CreateAPIView):
 
 
 class UserProfileEditView(generics.RetrieveUpdateAPIView):
-    # authentication_classes = [SessionAuthentication]
+    authentication_classes = [SessionAuthentication]
     serializer_class = UserSerializer
 
     def get_object(self):
