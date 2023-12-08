@@ -16,7 +16,7 @@ class LoginAPIView(APIView):
 
         user = authenticate(request, username=username, password=password)
         if user:
-            login(request.user)
+            login(request, user)
             return Response({'detail': 'authentication successfull.'})
         return Response({'detail': 'invalid'}, status=status.HTTP_401_UNAUTHORIZED)
 
