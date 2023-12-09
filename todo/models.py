@@ -33,6 +33,7 @@ class GroupModel(models.Model):
         User,
         through="MembershipModel",
         through_fields=("group", "user"),
+        related_name="group",
     )
 
 
@@ -45,3 +46,5 @@ class MembershipModel(models.Model):
         related_name="membership_invites",
         null=True
     )
+
+
