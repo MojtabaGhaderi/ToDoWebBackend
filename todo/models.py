@@ -31,6 +31,8 @@ class GroupModel(models.Model):
         through_fields=("group", "user"),
     )
 
+    Public = models.BooleanField(default=False)
+
 
 class MembershipModel(models.Model):
     group = models.ForeignKey(GroupModel, on_delete=models.CASCADE)
@@ -39,4 +41,5 @@ class MembershipModel(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="membership_invites",
+        null=True
     )
