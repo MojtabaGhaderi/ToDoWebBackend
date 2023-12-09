@@ -10,6 +10,10 @@ from django.contrib.auth import authenticate, login
 from .serializers import TasksSerializer, AboutSerializer, ProfileUserSerializer, UserSerializer
 from .models import TasksModel, User
 
+# /////
+# user related views:
+# ////
+
 
 class LoginAPIView(APIView):
 
@@ -34,6 +38,11 @@ class UserProfileEditView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+# ////////#
+# Tasks here:
+# ///////#
 
 
 class TaskCreateView(generics.CreateAPIView):
