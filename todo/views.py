@@ -2,13 +2,16 @@ from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
 
 from rest_framework import generics, status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.contrib.auth import authenticate, login
 
-from .serializers import TasksSerializer, AboutSerializer, ProfileUserSerializer, UserSerializer
-from .models import TasksModel, User
+from .serializers import (TasksSerializer, AboutSerializer,
+                          ProfileUserSerializer, UserSerializer,
+                          GroupCreateSerializer, GroupDetailSerializer)
+from .models import TasksModel, User, GroupModel, MembershipModel
 
 # /////
 # user related views:
@@ -39,6 +42,30 @@ class UserProfileEditView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
+# ////////#
+# Group related views here:
+# ///////#
+
+
+class GroupCreateView(generics.CreateAPIView):
+    serializer_class = GroupCreateSerializer
+
+
+class GroupDetailView(generics.RetrieveAPIView):
+    serializer_class = GroupDetailSerializer
+
+
+class GroupUpdateView(generics.RetrieveUpdateAPIView):
+    serializer_class = GroupDetailSerializer
+
+
+@api_view(['GET'])
+def group_router(request, *args, **kwargs):
+    group = GroupModel.objects.get(pk=kwargs['pk'])
+    if group.creator == request.user:
+        return GroupUpdateView.as_view()(request, *args, **kwargs)
+    else:
+        return GroupDetailView.as_view()(request, *args, **kwargs)
 
 # ////////#
 # Tasks here:
