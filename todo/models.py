@@ -25,13 +25,15 @@ class ProfilePictureModel(models.Model):
 
 class GroupModel(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    Public = models.BooleanField(default=False)
+    about = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now=True)
+    creator = models.ForeignKey(User, on_delete=models.PROTECT)
     members = models.ManyToManyField(
         User,
         through="MembershipModel",
         through_fields=("group", "user"),
     )
-
-    Public = models.BooleanField(default=False)
 
 
 class MembershipModel(models.Model):
