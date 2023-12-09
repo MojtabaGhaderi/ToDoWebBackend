@@ -8,12 +8,15 @@ urlpatterns = [
     path('tasks/create/',views.TaskCreateView.as_view(), name='create'),
     path('tasks/<int:pk>/', views.TaskDetailView.as_view(), name='task_detail'),
 
+    path('groups/<int:pk>/', views.group_router, name='group_router'),
+
 
     path('profile/', views.UserProfileEditView.as_view(), name='profile'),
 
     path('login/', views.LoginAPIView.as_view(), name='login'),
 
     path('signup/', views.UserCreateView.as_view(), name='signup'),
+
 ]
 
 
