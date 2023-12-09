@@ -48,3 +48,13 @@ class MembershipModel(models.Model):
     )
 
 
+class FriendshipModel(models.Model):
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendship1')
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendship2')
+    created_at = models.DateField(auto_now=True)
+
+
+class FriendRequest(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receiver')
+    status = models.CharField(default="Pending", editable=False)
