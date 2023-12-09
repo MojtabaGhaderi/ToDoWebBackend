@@ -54,7 +54,7 @@ class FriendshipModel(models.Model):
     created_at = models.DateField(auto_now=True)
 
 
-class FriendRequest(models.Model):
+class FriendRequestModel(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receiver')
     status = models.CharField(default="Pending", editable=False)
