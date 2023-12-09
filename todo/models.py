@@ -25,7 +25,7 @@ class ProfilePictureModel(models.Model):
 
 class GroupModel(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    Public = models.BooleanField(default=False)
+    public = models.BooleanField(default=False)
     about = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(User, on_delete=models.PROTECT)

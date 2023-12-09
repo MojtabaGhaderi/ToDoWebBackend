@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from todo.models import TasksModel, ProfilePictureModel
+from todo.models import TasksModel, ProfilePictureModel, GroupModel
 from django.contrib.auth.models import User
 
 
@@ -23,6 +23,18 @@ class UserSerializer(serializers.ModelSerializer):
         if profile_pic_data:
             ProfilePictureModel.objects.create(user=user, **profile_pic_data)
         return user
+
+
+class GroupCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupModel
+        fields = ['name', 'about', 'public']
+
+
+class GroupDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupModel
+        fields = '__all__'
 
 
 class TasksSerializer(serializers.ModelSerializer):
