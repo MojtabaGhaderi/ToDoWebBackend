@@ -22,3 +22,21 @@ class ProfilePictureModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.ImageField(blank=True,upload_to='profile_pictures')
 
+
+class GroupModel(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    members = models.ManyToManyField(
+        User,
+        through="MembershipModel",
+        through_fields=("group", "user"),
+    )
+
+
+class MembershipModel(models.Model):
+    group = models.ForeignKey(GroupModel, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    inviter = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="membership_invites",
+    )
