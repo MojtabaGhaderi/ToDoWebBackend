@@ -10,9 +10,10 @@ from django.contrib.auth import authenticate, login
 
 from .serializers import (TasksSerializer, AboutSerializer,
                           ProfileUserSerializer, UserSerializer,
-                          GroupCreateSerializer, GroupDetailSerializer, FriendRequestSerializer)
-from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel
+                          GroupCreateSerializer, GroupDetailSerializer, FriendRequestSerializer,
+                          UserProfileDetailSerializer)
 
+from .models import TasksModel, User, GroupModel, MembershipModel
 
 # /////
 # user related views:
@@ -58,8 +59,11 @@ class FriendRequestCreate(generics.CreateAPIView):
         serializer.save()
 
     def post(self, request, *args, **kwargs):
+
+        # I'm not sure that this works...
+
         receiver_id = kwargs['profile_id']
-        # receiver =
+        receiver = User.objects.get(id=receiver_id)
         serializer = self.get_serializer(data=request.data, context={'receiver': receiver})
         serializer.is_valid(raise_exeption=True)
         self.perform_create(serializer)
@@ -67,8 +71,11 @@ class FriendRequestCreate(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class FriendRequestResponse(generics.RetrieveUpdateDestroyAPIView):
+# class FriendRequestResponse(generics.RetrieveUpdateDestroyAPIView):
+#
 
+class UserProfileDetailView(generics.RetrieveAPIView):
+    serializer_class = UserProfileDetailSerializer
 
 
 # ////////#
