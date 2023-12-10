@@ -10,8 +10,9 @@ from django.contrib.auth import authenticate, login
 
 from .serializers import (TasksSerializer, AboutSerializer,
                           ProfileUserSerializer, UserSerializer,
-                          GroupCreateSerializer, GroupDetailSerializer)
-from .models import TasksModel, User, GroupModel, MembershipModel
+                          GroupCreateSerializer, GroupDetailSerializer, FriendRequestSerializer)
+from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel
+
 
 # /////
 # user related views:
@@ -41,6 +42,34 @@ class UserProfileEditView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+#I need another view to show profiles of users for others.
+
+# ////////#
+# Friend related views here:
+# ///////#
+
+
+class FriendRequestCreate(generics.CreateAPIView):
+    serializer_class = FriendRequestSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def post(self, request, *args, **kwargs):
+        receiver_id = kwargs['profile_id']
+        # receiver =
+        serializer = self.get_serializer(data=request.data, context={'receiver': receiver})
+        serializer.is_valid(raise_exeption=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class FriendRequestResponse(generics.RetrieveUpdateDestroyAPIView):
+
+
 
 # ////////#
 # Group related views here:
