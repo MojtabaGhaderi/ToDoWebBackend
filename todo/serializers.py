@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from todo.models import TasksModel, ProfilePictureModel, GroupModel, FriendRequestModel
+from todo.models import TasksModel, ProfilePictureModel, GroupModel, FriendRequestModel, FriendshipModel
 from django.contrib.auth.models import User
 
 
@@ -54,6 +54,11 @@ class FriendRequestResponseSerializer(serializers.ModelSerializer):
         fields = ['sender', 'status']
         read_only_fields = ['sender']
 
+
+class FriendshipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FriendshipModel
+        fields = '__all'__
 
 
 
