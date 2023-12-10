@@ -58,7 +58,7 @@ class FriendRequestResponseSerializer(serializers.ModelSerializer):
 class FriendshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendshipModel
-        fields = '__all'__
+        fields = '__all__'
 
 
 
