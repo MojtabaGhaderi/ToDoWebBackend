@@ -10,7 +10,7 @@ urlpatterns = [
 
     path('groups/<int:pk>/', views.group_router, name='group_router'),
 
-
+    path('profile/<int:pk>',views.UserProfileDetailView.as_view(), name='profile_detail'),
     path('profile/', views.UserProfileEditView.as_view(), name='profile'),
 
     path('login/', views.LoginAPIView.as_view(), name='login'),
