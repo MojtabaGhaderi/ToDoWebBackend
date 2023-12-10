@@ -12,7 +12,9 @@ urlpatterns = [
 
     path('profile/<int:pk>',views.UserProfileDetailView.as_view(), name='profile_detail'),
     path('profile/', views.UserProfileEditView.as_view(), name='profile'),
-    path('profile/friends', views.FriendListView.as_view(), name='friend_list'),
+
+    path('friends', views.FriendListView.as_view(), name='friend_list'),
+    path('friends/edit', views.FriendListEdit.as_view(), name='Friend_edit'),
 
     path('login/', views.LoginAPIView.as_view(), name='login'),
 
