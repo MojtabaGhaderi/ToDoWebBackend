@@ -25,10 +25,19 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class FriendRequestSerializer(serializers.Serializer):
+class FriendRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendRequestModel
-        fields = '__all__'
+        fields = ['receiver']
+        read_only_fields = ['receiver']
+
+    def create(self, validated_data):
+        sender = self.context['request'].user
+        receiver = self.context['receiver']
+        validated_data['sender'] = sender
+        validated_data['status'] = 'Pending'
+        validated_data['receiver'] = receiver
+        return super().create(validated_data)
 
 
 class GroupCreateSerializer(serializers.ModelSerializer):
