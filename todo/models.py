@@ -20,7 +20,8 @@ class TasksModel(models.Model):
 
 class ProfilePictureModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_pic = models.ImageField(blank=True,upload_to='profile_pictures')
+    profile_pic = models.ImageField(blank=True, upload_to='profile_pictures')
+    about_me = models.CharField(blank=True)
 
 
 class GroupModel(models.Model):
@@ -57,4 +58,10 @@ class FriendshipModel(models.Model):
 class FriendRequestModel(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receiver')
-    status = models.CharField(default="Pending", editable=False)
+
+    choices = [
+        ("P", "pending"),
+        ("Y", "accepted"),
+        ("N", "denied")
+    ]
+    status = models.CharField(default="Pending", choices=choices , editable=False)
