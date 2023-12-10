@@ -3,6 +3,7 @@ from rest_framework.authentication import SessionAuthentication
 
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,7 +12,7 @@ from django.contrib.auth import authenticate, login
 from .serializers import (TasksSerializer, AboutSerializer,
                           ProfileUserSerializer, UserSerializer,
                           GroupCreateSerializer, GroupDetailSerializer, FriendRequestSerializer,
-                          UserProfileDetailSerializer, FriendRequestResponseSerializer)
+                          UserProfileDetailSerializer, FriendRequestResponseSerializer, FriendshipSerializer)
 
 from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel, FriendshipModel
 
@@ -46,7 +47,8 @@ class UserProfileEditView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 
-#I need another view to show profiles of users for others.
+class UserProfileDetailView(generics.RetrieveAPIView):
+    serializer_class = UserProfileDetailSerializer
 
 # ////////#
 # Friend related views here:
@@ -89,11 +91,14 @@ class FriendRequestResponse(generics.RetrieveUpdateDestroyAPIView):
             instance.delete()
 
 
+class FriendListView(generics.ListAPIView):
+    serializer_class = FriendshipSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        user_id = self.request.user.id
 
-class UserProfileDetailView(generics.RetrieveAPIView):
-    serializer_class = UserProfileDetailSerializer
-
+        return FriendshipModel.objects.filter(user1=user_id) | FriendshipModel.objects.filter(user2=user_id)
 
 # ////////#
 # Group related views here:
