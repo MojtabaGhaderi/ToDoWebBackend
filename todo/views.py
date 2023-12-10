@@ -100,6 +100,16 @@ class FriendListView(generics.ListAPIView):
 
         return FriendshipModel.objects.filter(user1=user_id) | FriendshipModel.objects.filter(user2=user_id)
 
+
+class FriendListEdit(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = FriendshipSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+
+        return FriendshipModel.objects.filter(user1=user_id) | FriendshipModel.objects.filter(user2=user_id)
+
 # ////////#
 # Group related views here:
 # ///////#
