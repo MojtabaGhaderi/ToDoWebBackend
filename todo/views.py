@@ -11,9 +11,10 @@ from django.contrib.auth import authenticate, login
 from .serializers import (TasksSerializer, AboutSerializer,
                           ProfileUserSerializer, UserSerializer,
                           GroupCreateSerializer, GroupDetailSerializer, FriendRequestSerializer,
-                          UserProfileDetailSerializer)
+                          UserProfileDetailSerializer, FriendRequestResponseSerializer)
 
-from .models import TasksModel, User, GroupModel, MembershipModel
+from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel, FriendshipModel
+
 
 # /////
 # user related views:
@@ -71,8 +72,24 @@ class FriendRequestCreate(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-# class FriendRequestResponse(generics.RetrieveUpdateDestroyAPIView):
-#
+class FriendRequestResponse(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = FriendRequestResponseSerializer
+    queryset = FriendRequestModel.objects.all()
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        status = instance.status
+
+        if status == 'P':
+            receiver = instance.receiver
+            sender = instance.sender
+            friendship = FriendshipModel.objects.create(user1=sender, user2=receiver)
+            instance.delete()
+        elif status == 'N':
+            instance.delete()
+
+
+
 
 class UserProfileDetailView(generics.RetrieveAPIView):
     serializer_class = UserProfileDetailSerializer
