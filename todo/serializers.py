@@ -48,6 +48,15 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+class FriendRequestResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FriendRequestModel
+        fields = ['sender', 'status']
+        read_only_fields = ['sender']
+
+
+
+
 class GroupCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupModel
