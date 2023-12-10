@@ -62,7 +62,6 @@ class FriendshipSerializer(serializers.ModelSerializer):
         read_only_fields = ['user1', 'user2', 'created_at']
 
 
-
 class GroupCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupModel
