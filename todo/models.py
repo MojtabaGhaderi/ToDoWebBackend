@@ -21,7 +21,7 @@ class TasksModel(models.Model):
 class ProfilePictureModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.ImageField(blank=True, upload_to='profile_pictures')
-    about_me = models.CharField(blank=True)
+    about_me = models.TextField(blank=True)
 
 
 class GroupModel(models.Model):
@@ -64,4 +64,4 @@ class FriendRequestModel(models.Model):
         ("Y", "accepted"),
         ("N", "denied")
     ]
-    status = models.CharField(default="Pending", choices=choices , editable=False)
+    status = models.CharField(max_length=1, default="Pending", choices=choices , editable=False)
