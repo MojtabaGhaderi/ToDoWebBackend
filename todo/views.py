@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate, login
 
 from .serializers import (TasksSerializer, AboutSerializer,
                           ProfileUserSerializer, UserSerializer,
-                          GroupCreateSerializer, GroupDetailSerializer)
+                          GroupCreateSerializer, GroupDetailSerializer, UserProfileDetailSerializer)
 from .models import TasksModel, User, GroupModel, MembershipModel
 
 # /////
@@ -41,6 +41,10 @@ class UserProfileEditView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class UserProfileDetailView(generics.RetrieveAPIView):
+    serializer_class = UserProfileDetailSerializer
 
 # ////////#
 # Group related views here:
