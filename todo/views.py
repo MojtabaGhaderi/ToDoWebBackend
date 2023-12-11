@@ -155,3 +155,12 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [SessionAuthentication]
     queryset = TasksModel.objects.all()
     serializer_class = AboutSerializer
+
+
+# //////////
+# Feed views from here:
+# ////
+
+class PublicTasksViews(generics.ListAPIView):
+    queryset = TasksModel.objects.filter(status='P')
+    serializer_class = AboutSerializer
