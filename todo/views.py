@@ -13,7 +13,8 @@ from django.contrib.auth import authenticate, login
 from .serializers import (TasksSerializer, AboutSerializer,
                           ProfileUserSerializer, UserSerializer,
                           GroupCreateSerializer, GroupDetailSerializer, FriendRequestSerializer,
-                          UserProfileDetailSerializer, FriendRequestResponseSerializer, FriendshipSerializer)
+                          UserProfileDetailSerializer, FriendRequestResponseSerializer, FriendshipSerializer,
+                          TaskGroupSerializer)
 
 from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel, FriendshipModel
 
@@ -147,6 +148,16 @@ class TaskCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
+
+
+class GroupTaskCreate(generics.CreateAPIView):
+    # authentication needed
+    serializer_class = TaskGroupSerializer
+
+    def perform_create(self, serializer):
+        group_id = self.request.data.get('group_id')
+        group = GroupModel.objects.get(id=group_id)
+        serializer.save(in_group=group, status='G')
 
 
 class TasklistView(generics.ListAPIView):

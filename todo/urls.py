@@ -22,6 +22,7 @@ urlpatterns = [
 
     path('public-tasks/', views.PublicTasksViews.as_view(), name='public_tasks'),
     path('friends-tasks/', views.FriendTasksView.as_view(), name='friends_tasks'),
+    path('group/<int:pk>/tasks/create', views.GroupTaskCreate.as_view(), name="group_task_create"),
 
 ]
 

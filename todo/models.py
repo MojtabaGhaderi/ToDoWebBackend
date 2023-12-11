@@ -29,7 +29,7 @@ class TasksModel(models.Model):
     status_choices = [
         ('S', 'Private'),
         ('F', 'Friends'),
-        ('G', 'Groups'),
+        # ('G', 'Groups'),
         ('P', 'Public')
     ]
     status = models.CharField(max_length=1, choices=status_choices, default='F')

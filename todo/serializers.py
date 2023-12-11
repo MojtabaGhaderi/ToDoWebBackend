@@ -80,6 +80,13 @@ class TasksSerializer(serializers.ModelSerializer):
         fields = ["task", "descriptions", "date", "durations", "done", 'status']
 
 
+class TaskGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TasksModel
+        fields = ["task", "descriptions", "date", "durations", "done", 'status', 'in_group']
+        read_only_fields = ['status', 'in_group']
+
+
 class AboutSerializer(serializers.ModelSerializer):
     class Meta:
         model = TasksModel
