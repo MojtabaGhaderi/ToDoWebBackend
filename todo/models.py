@@ -11,6 +11,14 @@ class TasksModel(models.Model):
     done = models.BooleanField(default=False, blank=True)
     about = models.TextField(blank=True, null=True)
 
+    status_choices = [
+        ('S', 'Private'),
+        ('F', 'Friends'),
+        ('G', 'Groups'),
+        ('P', 'Public')
+    ]
+    status = models.CharField(max_length=1, choices=status_choices, default='F')
+
     class Meta:
         ordering = ['-created']
 
