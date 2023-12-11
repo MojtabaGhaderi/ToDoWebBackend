@@ -77,7 +77,7 @@ class GroupDetailSerializer(serializers.ModelSerializer):
 class TasksSerializer(serializers.ModelSerializer):
     class Meta:
         model = TasksModel
-        fields = ["task", "descriptions", "date", "durations", "done"]
+        fields = ["task", "descriptions", "date", "durations", "done", 'status']
 
 
 class AboutSerializer(serializers.ModelSerializer):
