@@ -10,6 +10,7 @@ class TasksModel(models.Model):
     created = models.DateTimeField(auto_now=True)
     done = models.BooleanField(default=False, blank=True)
     about = models.TextField(blank=True, null=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
 
     status_choices = [
         ('S', 'Private'),

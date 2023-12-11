@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
 
@@ -144,6 +145,9 @@ class TaskCreateView(generics.CreateAPIView):
     authentication_classes = [SessionAuthentication]
     serializer_class = TasksSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
+
 
 class TasklistView(generics.ListAPIView):
     authentication_classes = [SessionAuthentication]
@@ -164,3 +168,45 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
 class PublicTasksViews(generics.ListAPIView):
     queryset = TasksModel.objects.filter(status='P')
     serializer_class = AboutSerializer
+
+
+from django.db.models import Q
+
+
+class FriendTasksView(generics.ListAPIView):
+    serializer_class = AboutSerializer
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        friends = FriendshipModel.objects.filter(Q(user1=user_id) | Q(user2=user_id))
+        friend_ids = [friend.user1_id if friend.user2_id == user_id else friend.user2_id for friend in friends]
+        return TasksModel.objects.filter(creator_id__in=friend_ids, status='F')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

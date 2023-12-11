@@ -21,6 +21,7 @@ urlpatterns = [
     path('signup/', views.UserCreateView.as_view(), name='signup'),
 
     path('public-tasks/', views.PublicTasksViews.as_view(), name='public_tasks'),
+    path('friends-tasks/', views.FriendTasksView.as_view(), name='friends_tasks'),
 
 ]
 
