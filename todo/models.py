@@ -1,6 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class GroupModel(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    public = models.BooleanField(default=False)
+    about = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now=True, editable=False)
+    creator = models.ForeignKey(User, on_delete=models.PROTECT, editable=False)
+    members = models.ManyToManyField(
+        User,
+        through="MembershipModel",
+        through_fields=("group", "user"),
+        related_name="group",
+    )
+
 
 class TasksModel(models.Model):
     task = models.CharField(max_length=255)
@@ -11,6 +24,7 @@ class TasksModel(models.Model):
     done = models.BooleanField(default=False, blank=True)
     about = models.TextField(blank=True, null=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
+    in_group = models.ForeignKey(GroupModel, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
 
     status_choices = [
         ('S', 'Private'),
@@ -33,18 +47,6 @@ class ProfilePictureModel(models.Model):
     about_me = models.TextField(blank=True)
 
 
-class GroupModel(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    public = models.BooleanField(default=False)
-    about = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now=True, editable=False)
-    creator = models.ForeignKey(User, on_delete=models.PROTECT, editable=False)
-    members = models.ManyToManyField(
-        User,
-        through="MembershipModel",
-        through_fields=("group", "user"),
-        related_name="group",
-    )
 
 
 class MembershipModel(models.Model):
