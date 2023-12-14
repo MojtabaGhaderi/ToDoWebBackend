@@ -48,3 +48,9 @@ class MembershipModel(models.Model):
         related_name="membership_invites",
         null=True
     )
+
+
+class JoinGroupRequestModel(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    group = models.OneToOneField(GroupModel, on_delete=models.CASCADE)
+    sent_at = models.DateTimeField(auto_now_add=True)
