@@ -10,7 +10,8 @@ from django.contrib.auth import authenticate, login
 
 from .serializers import (TasksSerializer, AboutSerializer,
                           ProfileUserSerializer, UserSerializer,
-                          GroupCreateSerializer, GroupDetailSerializer, UserProfileDetailSerializer)
+                          GroupCreateSerializer, GroupDetailSerializer, UserProfileDetailSerializer,
+                          GroupJoinSerializer)
 from .models import TasksModel, User, GroupModel, MembershipModel
 
 # /////
@@ -57,6 +58,18 @@ class GroupCreateView(generics.CreateAPIView):
 
 class GroupDetailView(generics.RetrieveAPIView):
     serializer_class = GroupDetailSerializer
+
+
+class GroupJoinView(generics.CreateAPIView):
+    serializer_class = GroupJoinSerializer
+
+    def post(self, request, *args, **kwargs):
+        group_id = self.request.get('group_id')
+        group = GroupModel.objects.get(id=group_id)
+        user = request.user
+
+        # if group.public:
+            
 
 
 class GroupUpdateView(generics.RetrieveUpdateAPIView):

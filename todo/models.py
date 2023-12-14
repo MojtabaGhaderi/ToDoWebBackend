@@ -31,6 +31,7 @@ class GroupModel(models.Model):
     creator = models.ForeignKey(User, on_delete=models.PROTECT, editable=False)
     members = models.ManyToManyField(
         User,
+        related_name= 'members',
         through="MembershipModel",
         through_fields=("group", "user"),
     )
@@ -39,6 +40,8 @@ class GroupModel(models.Model):
 class MembershipModel(models.Model):
     group = models.ForeignKey(GroupModel, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    joined_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)
     inviter = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
