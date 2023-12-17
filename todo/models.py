@@ -8,6 +8,7 @@ class GroupModel(models.Model):
     about = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=True, editable=False)
     creator = models.ForeignKey(User, on_delete=models.PROTECT, editable=False)
+    admin = models.ForeignKey(User,on_delete=models.PROTECT, related_name="admin", null=True)
     members = models.ManyToManyField(
         User,
         through="MembershipModel",
