@@ -15,7 +15,7 @@ from .serializers import (TasksSerializer, AboutSerializer,
                           ProfileUserSerializer, UserSerializer,
                           GroupCreateSerializer, GroupDetailSerializer, FriendRequestSerializer,
                           UserProfileDetailSerializer, FriendRequestResponseSerializer, FriendshipSerializer,
-                          TaskGroupSerializer, GroupJoinRequestsSerializer, GroupJoinSerializer)
+                          TaskGroupSerializer, GroupJoinRequestsSerializer, GroupJoinSerializer, MembershipSerializer)
 
 from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel, FriendshipModel
 
@@ -23,10 +23,9 @@ from .models import TasksModel, User, GroupModel, MembershipModel, JoinGroupRequ
 from django.db.models import Q
 
 
-
-# /////
+# //////////////////////////
 # user related views:
-# ////
+# //////////////////////////
 
 
 class LoginAPIView(APIView):
@@ -57,9 +56,9 @@ class UserProfileEditView(generics.RetrieveUpdateAPIView):
 class UserProfileDetailView(generics.RetrieveAPIView):
     serializer_class = UserProfileDetailSerializer
 
-# ////////#
+# ///////////////////////////
 # Friend related views here:
-# ///////#
+# ///////////////////////////
 
 
 class FriendRequestCreate(generics.CreateAPIView):
@@ -117,9 +116,20 @@ class FriendListEdit(generics.RetrieveUpdateDestroyAPIView):
 
         return FriendshipModel.objects.filter(user1=user_id) | FriendshipModel.objects.filter(user2=user_id)
 
-# ////////#
+# ////////////////////////////
 # Group related views here:
-# ///////#
+# ///////////////////////////
+
+
+class UserGroupListView(generics.ListAPIView):
+    serializer_class = MembershipSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        memberships = MembershipModel.objects.filter(user=user)
+        groups = [membership.group for membership in memberships]
+
+        return groups
 
 
 class GroupCreateView(generics.CreateAPIView):
@@ -223,9 +233,9 @@ def group_router(request, *args, **kwargs):
     else:
         return GroupDetailView.as_view()(request, *args, **kwargs)
 
-# ////////#
+# //////////////////////
 # Tasks here:
-# ///////#
+# //////////////////////
 
 
 class TaskCreateView(generics.CreateAPIView):
@@ -258,9 +268,9 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AboutSerializer
 
 
-# //////////
+# ///////////////////////
 # Feed views from here:
-# ////
+# //////////////////////
 
 class PublicTaskListView(generics.ListAPIView):
     queryset = TasksModel.objects.filter(status='P')

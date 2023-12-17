@@ -11,6 +11,7 @@ urlpatterns = [
     path('groups/<int:pk>/', views.group_router, name='group_router'),
     path('group/invitation', views.GroupJoinInvitationResponse.as_view(), name='group_invitation'),
     path('group/reqtojoin', views.GroupJoinRequestResponse.as_view(), name='group_join_request'),
+    path('mygroups', views.UserGroupListView.as_view(), name='user_groups'),
 
     path('profile/<int:pk>',views.UserProfileDetailView.as_view(), name='profile_detail'),
     path('profile/', views.UserProfileEditView.as_view(), name='profile'),

@@ -78,8 +78,11 @@ class GroupDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class Membership:
-    pass
+class MembershipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MembershipModel
+        fields = '__all__'
+        read_only_fields = ['group', 'user', 'joined_at', 'invitor']
 
 
 class GroupJoinSerializer(serializers.ModelSerializer):
