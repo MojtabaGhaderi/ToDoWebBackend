@@ -10,13 +10,17 @@ from rest_framework.views import APIView
 
 from django.contrib.auth import authenticate, login
 
+from rest_framework.exceptions import ValidationError
 from .serializers import (TasksSerializer, AboutSerializer,
                           ProfileUserSerializer, UserSerializer,
                           GroupCreateSerializer, GroupDetailSerializer, FriendRequestSerializer,
                           UserProfileDetailSerializer, FriendRequestResponseSerializer, FriendshipSerializer,
-                          TaskGroupSerializer)
+                          TaskGroupSerializer, GroupJoinRequestsSerializer, GroupJoinSerializer)
 
 from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel, FriendshipModel
+
+from .models import TasksModel, User, GroupModel, MembershipModel, JoinGroupRequestModel
+
 
 
 # /////
@@ -125,6 +129,91 @@ class GroupDetailView(generics.RetrieveAPIView):
     serializer_class = GroupDetailSerializer
 
 
+class GroupJoinView(generics.CreateAPIView):
+    serializer_class = GroupJoinSerializer
+
+    def post(self, request, *args, **kwargs):
+        group_id = self.request.get('group_id')
+        group = GroupModel.objects.get(id=group_id)
+        user = request.user
+
+        if group.public:
+            membership = MembershipModel(user=user, group=group)
+            membership.save()
+            return Response({'detail': 'you are now a member of this group.'})
+
+        else:
+            join_group_request = JoinGroupRequestModel(invited=user, group=group, request_to_join=True)
+            join_group_request.save()
+            return Response({'detail': 'your join request has been sent and now is pending.'})
+
+
+class GroupSendInvitationView(generics.CreateAPIView):
+    serializer_class = GroupJoinRequestsSerializer
+
+    def post(self, request, *args, **kwargs):
+        group_id = self.request.get('group_id')
+        group = GroupModel.objects.get(id=group_id)
+
+        user_id = self.request.get('user_id')
+        user = User.objects.get(id=user_id)
+
+        invitor = request.user
+
+        invitation = JoinGroupRequestModel(invited=user, group=group, invitor=invitor, invitation=True)
+        invitation.save()
+
+
+class GroupJoinRequestResponse(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = GroupJoinRequestsSerializer
+    lookup_field = 'id'
+
+    def get_queryset(self):
+        group_id = self.kwargs['group_id']
+        return JoinGroupRequestModel.objects.filter(group_id=group_id)
+
+    def perform_update(self, serializer):
+        accepted = serializer.validated_data.get('accepted', None)
+        group = serializer.validated_data.get('group', None)
+        invited = serializer.validated_data.get('invited', None)
+        if accepted is not None and accepted:
+            membership = MembershipModel(user=invited, group=group)
+            membership.save()
+            join_request = JoinGroupRequestModel.objects.filter(group=group, invited=invited)
+            join_request.delete()
+        elif accepted is False:
+            join_request = JoinGroupRequestModel.objects.filter(group=group, invited=invited)
+            join_request.delete()
+
+
+class GroupJoinInvitationResponse(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = GroupJoinRequestsSerializer
+    lookup_field = 'id'
+
+    def get_queryset(self):
+        user = self.request.user
+        return JoinGroupRequestModel.objects.filter(invited=user)
+
+    def perform_update(self, serializer):
+        group = serializer.validated_data.get('group', None)
+        invited = serializer.validated_data.get('invited', None)
+        invitor = serializer.validated_data.get('invitor', None)
+        accepted = serializer.validated_data.get('accepted', None)
+
+        if accepted is not None and accepted:
+            membership = MembershipModel(user=invited, group=group, invitor=invitor)
+            membership.save()
+            join_request = JoinGroupRequestModel.objects.filter(group=group, invited=invited, invitor=invitor)
+            join_request.delete()
+        elif accepted is False:
+            join_request = JoinGroupRequestModel.objects.filter(group=group, invited=invited, invitor=invitor)
+            join_request.delete()
+
+
+
+
+
+
 class GroupUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = GroupDetailSerializer
 
@@ -192,30 +281,6 @@ class FriendTasksView(generics.ListAPIView):
         friends = FriendshipModel.objects.filter(Q(user1=user_id) | Q(user2=user_id))
         friend_ids = [friend.user1_id if friend.user2_id == user_id else friend.user2_id for friend in friends]
         return TasksModel.objects.filter(creator_id__in=friend_ids, status='F')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

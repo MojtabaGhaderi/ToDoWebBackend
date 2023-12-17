@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class GroupModel(models.Model):
     name = models.CharField(max_length=255, unique=True)
     public = models.BooleanField(default=False)
@@ -47,12 +48,12 @@ class ProfilePictureModel(models.Model):
     about_me = models.TextField(blank=True)
 
 
-
-
 class MembershipModel(models.Model):
     group = models.ForeignKey(GroupModel, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    inviter = models.ForeignKey(
+    joined_at = models.DateTimeField(auto_now_add=True)
+    # is_approved = models.BooleanField(default=False)
+    invitor = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="membership_invites",
@@ -76,3 +77,14 @@ class FriendRequestModel(models.Model):
         ("N", "denied")
     ]
     status = models.CharField(max_length=1, default="Pending", choices=choices , editable=False)
+
+
+class JoinGroupRequestModel(models.Model):
+    invited = models.OneToOneField(User, on_delete=models.CASCADE)
+    invitor = models.OneToOneField(User, on_delete=models.CASCADE, related_name='invitor', null=True)
+    group = models.OneToOneField(GroupModel, on_delete=models.CASCADE)
+    sent_at = models.DateTimeField(auto_now_add=True)
+    request_to_join = models.BooleanField(default=False, editable=False)
+    invitation = models.BooleanField(default=False, editable=False)
+    accepted = models.BooleanField(default=None)
+
