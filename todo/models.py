@@ -46,6 +46,7 @@ class ProfilePictureModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.ImageField(blank=True, upload_to='profile_pictures')
     about_me = models.TextField(blank=True)
+    points = models.IntegerField(default=0, editable=False)
 
 
 class MembershipModel(models.Model):
