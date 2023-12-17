@@ -41,8 +41,8 @@ class MembershipModel(models.Model):
     group = models.ForeignKey(GroupModel, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     joined_at = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=False)
-    inviter = models.ForeignKey(
+    # is_approved = models.BooleanField(default=False)
+    invitor = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="membership_invites",
@@ -51,8 +51,10 @@ class MembershipModel(models.Model):
 
 
 class JoinGroupRequestModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    invited = models.OneToOneField(User, on_delete=models.CASCADE)
+    invitor = models.OneToOneField(User, on_delete=models.CASCADE, related_name='invitor', null=True)
     group = models.OneToOneField(GroupModel, on_delete=models.CASCADE)
     sent_at = models.DateTimeField(auto_now_add=True)
     request_to_join = models.BooleanField(default=False, editable=False)
     invitation = models.BooleanField(default=False, editable=False)
+    accepted = models.BooleanField(default=None)

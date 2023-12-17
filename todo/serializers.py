@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from todo.models import TasksModel, ProfilePictureModel, GroupModel, MembershipModel
+from todo.models import TasksModel, ProfilePictureModel, GroupModel, MembershipModel, JoinGroupRequestModel
 from django.contrib.auth.models import User
 
 
@@ -54,6 +54,13 @@ class GroupJoinSerializer(serializers.ModelSerializer):
         model = MembershipModel
         fields = ['user', 'inviter', 'is_approved']
         read_only_fields = ['user']
+
+
+class GroupJoinRequestsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JoinGroupRequestModel
+        fields = '__all__'
+        read_only_fields = ('invited', 'invitor', 'group', 'sent_at', 'request_to_join', 'invitation')
 
 
 class TasksSerializer(serializers.ModelSerializer):

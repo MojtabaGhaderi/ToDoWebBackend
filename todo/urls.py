@@ -5,10 +5,12 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('tasks/', views.TasklistView.as_view(), name='tasks'),
-    path('tasks/create/',views.TaskCreateView.as_view(), name='create'),
+    path('tasks/create/', views.TaskCreateView.as_view(), name='create'),
     path('tasks/<int:pk>/', views.TaskDetailView.as_view(), name='task_detail'),
 
     path('groups/<int:pk>/', views.group_router, name='group_router'),
+    path('group/invitation', views.GroupJoinInvitationResponse.as_view(), name='group_invitation'),
+    path('group/reqtojoin', views.GroupJoinRequestResponse.as_view(), name='group_join_request'),
 
     path('profile/<int:pk>',views.UserProfileDetailView.as_view(), name='profile_detail'),
     path('profile/', views.UserProfileEditView.as_view(), name='profile'),
