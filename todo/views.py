@@ -20,6 +20,7 @@ from .serializers import (TasksSerializer, AboutSerializer,
 from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel, FriendshipModel
 
 from .models import TasksModel, User, GroupModel, MembershipModel, JoinGroupRequestModel
+from django.db.models import Q
 
 
 
@@ -210,10 +211,6 @@ class GroupJoinInvitationResponse(generics.RetrieveUpdateDestroyAPIView):
             join_request.delete()
 
 
-
-
-
-
 class GroupUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = GroupDetailSerializer
 
@@ -265,22 +262,30 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
 # Feed views from here:
 # ////
 
-class PublicTasksViews(generics.ListAPIView):
+class PublicTaskListView(generics.ListAPIView):
     queryset = TasksModel.objects.filter(status='P')
     serializer_class = AboutSerializer
 
 
-from django.db.models import Q
-
-
-class FriendTasksView(generics.ListAPIView):
+class FriendTaskListView(generics.ListAPIView):
     serializer_class = AboutSerializer
 
     def get_queryset(self):
         user_id = self.request.user.id
         friends = FriendshipModel.objects.filter(Q(user1=user_id) | Q(user2=user_id))
-        friend_ids = [friend.user1_id if friend.user2_id == user_id else friend.user2_id for friend in friends]
+        friend_ids = [friends.user1_id if friends.user2_id == user_id else friends.user2_id for friend in friends]
         return TasksModel.objects.filter(creator_id__in=friend_ids, status='F')
+
+
+class GroupTaskListView(generics.ListAPIView):
+    serializer_class = AboutSerializer
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        user = User.objects.get(id=user_id)
+        memberships = MembershipModel.objects.filter(user=user)
+        groups = [memberships.group for membership in memberships]
+        return TasksModel.objects.filter(in_group__in=groups, status='G')
 
 
 
