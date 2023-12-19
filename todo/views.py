@@ -21,6 +21,8 @@ from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequest
 
 from .models import TasksModel, User, GroupModel, MembershipModel, JoinGroupRequestModel
 from django.db.models import Q
+from .permissions import IsSelf, IsSelfFriendResponse, FriendListEditPermission, IsGroupAdmin, IsGroupHead, \
+    GroupJoinInvitationResponsePermission, IsInGroup
 
 
 # //////////////////////////
@@ -47,6 +49,7 @@ class UserCreateView(generics.CreateAPIView):
 
 class UserProfileEditView(generics.RetrieveUpdateAPIView):
     authentication_classes = [SessionAuthentication]
+    permission_classes = [IsSelf]
     serializer_class = UserSerializer
 
     def get_object(self):
@@ -81,6 +84,7 @@ class FriendRequestCreate(generics.CreateAPIView):
 
 
 class FriendRequestResponse(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsSelfFriendResponse]
     serializer_class = FriendRequestResponseSerializer
     queryset = FriendRequestModel.objects.all()
 
@@ -109,7 +113,7 @@ class FriendListView(generics.ListAPIView):
 
 class FriendListEdit(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = FriendshipSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, FriendListEditPermission]
 
     def get_queryset(self):
         user_id = self.request.user.id
@@ -134,6 +138,7 @@ class UserGroupListView(generics.ListAPIView):
 
 class GroupCreateView(generics.CreateAPIView):
     serializer_class = GroupCreateSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class GroupDetailView(generics.RetrieveAPIView):
@@ -161,6 +166,7 @@ class GroupJoinView(generics.CreateAPIView):
 
 class GroupSendInvitationView(generics.CreateAPIView):
     serializer_class = GroupJoinRequestsSerializer
+    permission_classes = [IsGroupAdmin, IsGroupHead]
 
     def post(self, request, *args, **kwargs):
         group_id = self.request.get('group_id')
@@ -178,6 +184,7 @@ class GroupSendInvitationView(generics.CreateAPIView):
 class GroupJoinRequestResponse(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GroupJoinRequestsSerializer
     lookup_field = 'id'
+    permission_classes = [IsGroupAdmin, IsGroupHead]
 
     def get_queryset(self):
         group_id = self.kwargs['group_id']
@@ -199,6 +206,7 @@ class GroupJoinRequestResponse(generics.RetrieveUpdateDestroyAPIView):
 
 class GroupJoinInvitationResponse(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GroupJoinRequestsSerializer
+    permission_classes = [GroupJoinInvitationResponsePermission]
     lookup_field = 'id'
 
     def get_queryset(self):
@@ -223,6 +231,7 @@ class GroupJoinInvitationResponse(generics.RetrieveUpdateDestroyAPIView):
 
 class GroupUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = GroupDetailSerializer
+    permission_classes = [IsGroupHead]
 
 
 @api_view(['GET'])
@@ -240,6 +249,7 @@ def group_router(request, *args, **kwargs):
 
 class TaskCreateView(generics.CreateAPIView):
     authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = TasksSerializer
 
     def perform_create(self, serializer):
@@ -247,7 +257,7 @@ class TaskCreateView(generics.CreateAPIView):
 
 
 class GroupTaskCreate(generics.CreateAPIView):
-    # authentication needed
+    permission_classes = [IsInGroup]
     serializer_class = TaskGroupSerializer
 
     def perform_create(self, serializer):
@@ -278,6 +288,7 @@ class PublicTaskListView(generics.ListAPIView):
 
 
 class FriendTaskListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = AboutSerializer
 
     def get_queryset(self):
@@ -288,6 +299,7 @@ class FriendTaskListView(generics.ListAPIView):
 
 
 class GroupTaskListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated, IsInGroup]
     serializer_class = AboutSerializer
 
     def get_queryset(self):

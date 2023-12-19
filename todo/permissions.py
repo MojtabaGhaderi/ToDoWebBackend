@@ -8,14 +8,33 @@ class IsSelf(BasePermission):
         return obj == request.user
 
 
+class IsSelfFriendResponse(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.reciever == request.user
+
+
+class GroupJoinInvitationResponsePermission(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.invited == request.user
+
+
+class FriendListEditPermission(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.user1 == request.user or obj.user2 == request.user
+
+
 class IsGroupHead(BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.creator == request.user
+        group = obj.group
+        find_group = GroupModel.objects.filter(group=group)
+        return find_group.creator == request.user
 
 
 class IsGroupAdmin(BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.admin == request.user
+        group = obj.group
+        find_group = GroupModel.objects.filter(group=group)
+        return find_group.admin == request.user
 
 
 class IsInGroup(BasePermission):
