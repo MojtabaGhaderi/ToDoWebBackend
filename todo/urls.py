@@ -8,6 +8,9 @@ urlpatterns = [
     path('tasks/create/', views.TaskCreateView.as_view(), name='create'),
     path('tasks/<int:pk>/', views.TaskDetailView.as_view(), name='task_detail'),
 
+    path('group-create', views.GroupCreateView.as_view(), name='group-create'),
+    path('group-join', views.GroupJoinView.as_view(), name='group-join'),
+    path('group-send-invite', views.GroupSendInvitationView.as_view(), name='group-send-invite'),
     path('groups/<int:pk>/', views.group_router, name='group_router'),
     path('group/invitation', views.GroupJoinInvitationResponse.as_view(), name='group_invitation'),
     path('group/reqtojoin', views.GroupJoinRequestResponse.as_view(), name='group_join_request'),
@@ -17,6 +20,8 @@ urlpatterns = [
     path('profile/', views.UserProfileEditView.as_view(), name='profile'),
 
     path('friends', views.FriendListView.as_view(), name='friend_list'),
+    path('friend-request', views.FriendRequestCreate.as_view(), name='friend_request'),
+    path('friend-request-response', views.FriendRequestResponse.as_view(), name='friend_request_response'),
     path('friends/edit', views.FriendListEdit.as_view(), name='Friend_edit'),
 
     path('login/', views.LoginAPIView.as_view(), name='login'),
