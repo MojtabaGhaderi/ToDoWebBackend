@@ -270,6 +270,7 @@ class TasklistView(generics.ListAPIView):
     authentication_classes = [SessionAuthentication]
     queryset = TasksModel.objects.all()
     serializer_class = AboutSerializer
+    # this view is for test and is going to be deleted
 
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
