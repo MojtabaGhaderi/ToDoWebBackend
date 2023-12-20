@@ -6,6 +6,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -122,7 +123,7 @@ class FriendListView(generics.ListAPIView):
         return FriendshipModel.objects.filter(user1=user_id) | FriendshipModel.objects.filter(user2=user_id)
 
 
-class FriendListEdit(generics.RetrieveUpdateDestroyAPIView):
+class FriendListEdit(generics.RetrieveDestroyAPIView):
     serializer_class = FriendshipSerializer
     permission_classes = [IsAuthenticated, FriendListEditPermission]
 
@@ -158,6 +159,7 @@ class GroupCreateView(generics.CreateAPIView):
 
 class GroupDetailView(generics.RetrieveAPIView):
     serializer_class = GroupDetailSerializer
+    queryset = GroupModel.objects.all()
 
 
 class GroupJoinView(generics.CreateAPIView):
@@ -198,12 +200,12 @@ class GroupSendInvitationView(generics.CreateAPIView):
 
 class GroupJoinRequestResponse(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GroupJoinRequestsSerializer
-    lookup_field = 'id'
+    # lookup_field = 'id'
     permission_classes = [IsGroupAdmin, IsGroupHead]
     authentication_classes = [SessionAuthentication]
 
     def get_queryset(self):
-        group_id = self.kwargs['group_id']
+        group_id = self.request.data.get('id')
         return JoinGroupRequestModel.objects.filter(group_id=group_id)
 
     def perform_update(self, serializer):
@@ -252,17 +254,16 @@ class GroupUpdateView(generics.RetrieveUpdateAPIView):
 
 
 @api_view(['GET'])
-def group_router(request, *args, **kwargs):
+def group_router(request: Request, *args, **kwargs):
+    django_request = HttpRequest()
+    django_request.method = request.method
+    django_request.user = request.user
+
     group = GroupModel.objects.get(pk=kwargs['pk'])
     if group.creator == request.user:
-        django_request = HttpRequest()
-        django_request.method = request.method
-        django_request.POST = request.POST
-        django_request.GET = request.GET
         return GroupUpdateView.as_view()(django_request, *args, **kwargs)
     else:
-        return GroupDetailView.as_view()(request, *args, **kwargs)
-
+        return GroupDetailView.as_view()(django_request, *args, **kwargs)
 # //////////////////////
 # Tasks here:
 # //////////////////////
@@ -317,7 +318,7 @@ class FriendTaskListView(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.request.user.id
         friends = FriendshipModel.objects.filter(Q(user1=user_id) | Q(user2=user_id))
-        friend_ids = [friends.user1_id if friends.user2_id == user_id else friends.user2_id for friend in friends]
+        friend_ids = [friend.user1 if friend.user2 == user_id else friend.user2 for friend in friends]
         return TasksModel.objects.filter(creator_id__in=friend_ids, status='F')
 
 

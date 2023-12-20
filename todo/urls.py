@@ -13,7 +13,7 @@ urlpatterns = [
     path('group-send-invite', views.GroupSendInvitationView.as_view(), name='group-send-invite'),
     path('groups/<int:pk>/', views.group_router, name='group_router'),
     path('group/invitation', views.GroupJoinInvitationResponse.as_view(), name='group_invitation'),
-    path('group/reqtojoin', views.GroupJoinRequestResponse.as_view(), name='group_join_request'),
+    path('group/reqtojoin/<int:pk>/', views.GroupJoinRequestResponse.as_view(), name='group_join_request'),
     path('mygroups', views.UserGroupListView.as_view(), name='user_groups'),
 
     path('profile/<int:pk>',views.UserProfileDetailView.as_view(), name='profile_detail'),
@@ -22,7 +22,7 @@ urlpatterns = [
     path('friends', views.FriendListView.as_view(), name='friend_list'),
     path('friend-request/', views.FriendRequestCreate.as_view(), name='friend_request'),
     path('friend-request-response/<int:pk>/', views.FriendRequestResponse.as_view(), name='friend_request_response'),
-    path('friends/edit', views.FriendListEdit.as_view(), name='Friend_edit'),
+    path('friends/edit/<int:pk>/', views.FriendListEdit.as_view(), name='Friend_edit'),
 
     path('login/', views.LoginAPIView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
