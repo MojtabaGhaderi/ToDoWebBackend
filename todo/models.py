@@ -78,7 +78,7 @@ class FriendRequestModel(models.Model):
         ("Y", "accepted"),
         ("N", "denied")
     ]
-    status = models.CharField(max_length=1, default="Pending", choices=choices , editable=False)
+    status = models.CharField(max_length=1, default="Pending", choices=choices)
 
 
 class JoinGroupRequestModel(models.Model):

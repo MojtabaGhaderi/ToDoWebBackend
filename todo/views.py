@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.http import HttpRequest
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
 
@@ -8,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 from rest_framework.exceptions import ValidationError
 from .serializers import (TasksSerializer, AboutSerializer,
@@ -17,12 +18,13 @@ from .serializers import (TasksSerializer, AboutSerializer,
                           UserProfileDetailSerializer, FriendRequestResponseSerializer, FriendshipSerializer,
                           TaskGroupSerializer, GroupJoinRequestsSerializer, GroupJoinSerializer, MembershipSerializer)
 
-from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel, FriendshipModel
+from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel, FriendshipModel, \
+    ProfilePictureModel
 
 from .models import TasksModel, User, GroupModel, MembershipModel, JoinGroupRequestModel
 from django.db.models import Q
 from .permissions import IsSelf, IsSelfFriendResponse, FriendListEditPermission, IsGroupAdmin, IsGroupHead, \
-    GroupJoinInvitationResponsePermission, IsInGroup
+    GroupJoinInvitationResponsePermission, IsInGroup, IsTaskOwner
 
 
 # //////////////////////////
@@ -43,6 +45,12 @@ class LoginAPIView(APIView):
         return Response({'detail': 'invalid'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
+class LogoutView(APIView):
+    def post(self, request, format=None):
+        logout(request)
+        return Response({'detail': 'Successfully logged out.'})
+
+
 class UserCreateView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
@@ -58,6 +66,7 @@ class UserProfileEditView(generics.RetrieveUpdateAPIView):
 
 class UserProfileDetailView(generics.RetrieveAPIView):
     serializer_class = UserProfileDetailSerializer
+    queryset = ProfilePictureModel
 
 # ///////////////////////////
 # Friend related views here:
@@ -74,10 +83,10 @@ class FriendRequestCreate(generics.CreateAPIView):
 
         # I'm not sure that this works...
 
-        receiver_id = kwargs['profile_id']
+        receiver_id = request.data.get('id')
         receiver = User.objects.get(id=receiver_id)
-        serializer = self.get_serializer(data=request.data, context={'receiver': receiver})
-        serializer.is_valid(raise_exeption=True)
+        serializer = self.get_serializer(data=request.data, context={'request':request, 'receiver': receiver})
+        serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -92,13 +101,15 @@ class FriendRequestResponse(generics.RetrieveUpdateDestroyAPIView):
         instance = serializer.save()
         status = instance.status
 
-        if status == 'P':
+        if status == 'Y':
             receiver = instance.receiver
             sender = instance.sender
             friendship = FriendshipModel.objects.create(user1=sender, user2=receiver)
             instance.delete()
         elif status == 'N':
             instance.delete()
+        else:
+            raise ValidationError('Fuck Off! that;s not allowed!')
 
 
 class FriendListView(generics.ListAPIView):
@@ -139,6 +150,10 @@ class UserGroupListView(generics.ListAPIView):
 class GroupCreateView(generics.CreateAPIView):
     serializer_class = GroupCreateSerializer
     permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        group = serializer.save(creator=self.request.user)
+        MembershipModel.objects.create(user=self.request.user, group=group)
 
 
 class GroupDetailView(generics.RetrieveAPIView):
@@ -185,6 +200,7 @@ class GroupJoinRequestResponse(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GroupJoinRequestsSerializer
     lookup_field = 'id'
     permission_classes = [IsGroupAdmin, IsGroupHead]
+    authentication_classes = [SessionAuthentication]
 
     def get_queryset(self):
         group_id = self.kwargs['group_id']
@@ -230,15 +246,20 @@ class GroupJoinInvitationResponse(generics.RetrieveUpdateDestroyAPIView):
 
 
 class GroupUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = GroupModel
     serializer_class = GroupDetailSerializer
-    permission_classes = [IsGroupHead]
+    permission_classes = [IsGroupHead, IsAuthenticated]
 
 
 @api_view(['GET'])
 def group_router(request, *args, **kwargs):
     group = GroupModel.objects.get(pk=kwargs['pk'])
     if group.creator == request.user:
-        return GroupUpdateView.as_view()(request, *args, **kwargs)
+        django_request = HttpRequest()
+        django_request.method = request.method
+        django_request.POST = request.POST
+        django_request.GET = request.GET
+        return GroupUpdateView.as_view()(django_request, *args, **kwargs)
     else:
         return GroupDetailView.as_view()(request, *args, **kwargs)
 
@@ -275,6 +296,7 @@ class TasklistView(generics.ListAPIView):
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [SessionAuthentication]
+    permission_classes = [IsTaskOwner]
     queryset = TasksModel.objects.all()
     serializer_class = AboutSerializer
 

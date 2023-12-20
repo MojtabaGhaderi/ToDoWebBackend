@@ -1,0 +1,504 @@
+[33mcommit 8b3bd88d545529a5fe56011fddb2e64aa8d90db9[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;32mpermissions[m[33m)[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Tue Dec 19 14:38:42 2023 +0330
+
+    minor changes
+
+[33mcommit cc2dc6ad78fae4cd11e74088c8984425ea7fdf79[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Tue Dec 19 13:33:36 2023 +0330
+
+    added left out urls
+
+[33mcommit a96a16a923d2ad0720f0e160a53fc6966c850d0a[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Tue Dec 19 13:26:39 2023 +0330
+
+    linked Permissions to views and also added a couple permission classes too.
+
+[33mcommit 719aad6b9b8df83df3c53c9f446ae2a6e3926102[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Tue Dec 19 13:03:42 2023 +0330
+
+    wrote permissions
+
+[33mcommit de8c72a69edd70c38e883ebdc5a1fa452dce7a93[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 17 21:38:14 2023 +0330
+
+    added admin field to GroupModel and ran migrations
+
+[33mcommit ad431242448e46431f3608eb71202bbb889083d8[m[33m ([m[1;32msignals[m[33m)[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 17 20:30:16 2023 +0330
+
+    created a signal for doing a task, added point fields to user profile model, and aded signals to apps.py
+
+[33mcommit c1b9de1b076b2d6df992660eba4ca84436d1124f[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 17 19:33:50 2023 +0330
+
+    created signal.py
+
+[33mcommit fc693be1b486bbe2140f7a460646e743a91aa80d[m[33m ([m[1;32mfeed[m[33m)[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 17 18:25:00 2023 +0330
+
+    added UserGroupListView and a membershipserializer and the url for it, so the user can see a list of his groups
+
+[33mcommit 72297e539a563aeb38e5ab012359691e59706601[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 17 17:58:24 2023 +0330
+
+    added GroupTaskListView and a url for it.
+
+[33mcommit 5442319053e81f20df255e12a8f3ab4a3ce2f185[m
+Merge: efc8405 05fbf2c
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 17 11:57:29 2023 +0330
+
+    merged the GroupCreate branch with this one so I have the option to accept the requests of joinin
+
+[33mcommit 05fbf2c3bd0a3aa6030bee0520ee0bff5de36801[m[33m ([m[1;32mGroupCreate[m[33m)[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 17 11:47:08 2023 +0330
+
+    the main thing I did was to create a way to accept joining requests and invitations...
+
+[33mcommit b2b88a9ce40ebcaa2011a1e88d6af48066a54f1f[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Thu Dec 14 17:07:11 2023 +0330
+
+    added request_to_join and invitioation fields to the JoinGroupRequestModel
+
+[33mcommit 03dee7e2813413716e43a58b0ff11b5819d2997c[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Thu Dec 14 16:54:49 2023 +0330
+
+    created the JoinGroupRequestModel
+
+[33mcommit d011b930f3a46f5501af351f56d62b836e5bc112[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Thu Dec 14 15:28:41 2023 +0330
+
+    just came back and I think i was working on join group option
+
+[33mcommit efc84055694e5fc3857fa9d97f7303a3540cefd3[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Mon Dec 11 14:55:01 2023 +0330
+
+     -deleted Group from status_choices inside TaskModel and ran migrations.
+    -created a new serializer for tasks in groups called TaskGroupSerializer.
+    -created a view to handel Creating tasks within a group called GroupTaskCreate. also added the url for it
+
+[33mcommit eb1b5538a7593abbdc7d7a8596c0a568b89f90f7[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Mon Dec 11 14:04:13 2023 +0330
+
+    added in_group field to TaskModel
+
+[33mcommit 754e84f3b2337149c123e40eedb766996033975c[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Mon Dec 11 12:38:25 2023 +0330
+
+     - added creator field to TaskModel and ran migrations.
+    -created FriendTaskView.
+    -wrote the urls for that.
+
+[33mcommit 0b6a727fc6319d43189ca5d579cf284a2a994d70[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Mon Dec 11 10:35:25 2023 +0330
+
+    added a url for public tasks
+
+[33mcommit 0a0a8b93b905db26708a7d54a9e005df00593276[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Mon Dec 11 10:30:10 2023 +0330
+
+    added PublicTasksViews
+
+[33mcommit 031cee669bb6ab20835f64b31ce830d516139552[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Mon Dec 11 10:21:40 2023 +0330
+
+    added the status field to TaskSerializer
+
+[33mcommit 4db5239c3236e527e7e61efcbd5e6410f1043354[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Mon Dec 11 10:12:21 2023 +0330
+
+    Just came to this Branch
+
+[33mcommit bcf6277b8c73e7a8410587c2c36fc42ff29798ca[m[33m ([m[1;32mFriendship[m[33m)[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Mon Dec 11 10:11:08 2023 +0330
+
+    added a task status to task model and ran migrations
+
+[33mcommit 066a942a233cc7a42c5ee9e272bf7d81c19abf9a[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 19:26:24 2023 +0330
+
+    updated the urls
+
+[33mcommit 73ce7dc3d956ce53d8bba5e38a94d42d5e6dd3e8[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 19:24:30 2023 +0330
+
+    something...
+
+[33mcommit 809d3baed1bd9795c9af046adb06713e7d18e8d3[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 19:23:42 2023 +0330
+
+     - changed the FriendshipSerializer and added read_only_fields to it. - also created FriendListEdit view
+
+[33mcommit eaf9db7ff5d0ebd340ea7dc0b17352c2d115d82d[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 19:09:27 2023 +0330
+
+    added the Friend_list url
+
+[33mcommit 53de0777db2ac2a145b0d48a39ff11c65a89dffc[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 19:05:53 2023 +0330
+
+    created FriendListView
+
+[33mcommit 46d67bc7ebb0d11e8e7704b08374a23e542fbd30[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 18:59:38 2023 +0330
+
+    created a serializer for listing all the friends of a user
+
+[33mcommit cec8a0fdda3fd116b9d2bd9a3dfb51a507747d29[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 18:59:22 2023 +0330
+
+    created a serializer for listing all the friends of a user
+
+[33mcommit a9dde86fc9030677c1419ee23347386db307b720[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 18:27:56 2023 +0330
+
+    completed FriendRequestResponse view
+
+[33mcommit 46d7882934237fa040241c5105b5bb10dad19dfc[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 17:07:08 2023 +0330
+
+    created a Serializer for FriendRequestResponse
+
+[33mcommit 7e583783679f3300224710cdaf0309b5190efdc6[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 17:01:54 2023 +0330
+
+    ran the migrations
+
+[33mcommit 2fea3f449417e24136f2a5a8ed5d6184411d3691[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 16:58:24 2023 +0330
+
+    changed the models
+
+[33mcommit 4ad4c82dd18bf88e94ac9bf66e758b115e444c3c[m
+Merge: 663c7c9 32679a6
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 16:43:42 2023 +0330
+
+    merged with GroupCreate since I added a profiledetailview to it. and also completed the FriendRequestCreat View
+
+[33mcommit 32679a667c024b3a7d65be5e368bf53b38756206[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 16:31:38 2023 +0330
+
+    added a url for profile detail
+
+[33mcommit af91833773e425f1ca95eb87eb09ab1e39ae9f9b[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 16:29:49 2023 +0330
+
+    added a view called UserProfileDetailView
+
+[33mcommit 59ccea8393b3656017ba9731ade1a4cb4f3a145f[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 16:28:20 2023 +0330
+
+    added a serializer for user profile detail
+
+[33mcommit 663c7c91848b804a28d23ddd8148086202f61a7a[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 15:20:36 2023 +0330
+
+    leaving the FreindRequestCreateView undone so I can make a profile detail view and come back, cause I need the url of profile of a user
+
+[33mcommit b46c3a829e5a5ada3389fabd5f78494d11d4eb49[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sun Dec 10 12:41:31 2023 +0330
+
+    Updated the Friendshipserializer
+
+[33mcommit 3c53406c5823337784d6b94006d0f26d54ff4cd4[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 19:05:42 2023 +0330
+
+    created a serializer for freind request
+
+[33mcommit ba2d608c4c8c0475431d6e7ec057a1c63ac4c6d6[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 18:48:04 2023 +0330
+
+    typo in models
+
+[33mcommit d1e9c93186db643dc9c913e31b8d2f302aaefdfb[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 18:43:23 2023 +0330
+
+    created models for friendship and Friend request
+
+[33mcommit c2f513061c4006799d9e2b345728c353a85a36cd[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 17:10:37 2023 +0330
+
+    made migrations so far
+
+[33mcommit 7527c87fa420be8b8019defe413480b9104ff5b1[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 16:45:53 2023 +0330
+
+    updated the urls: added the groups_router path to it
+
+[33mcommit 897bc83cda0f74df4a3e31564d77eacf4b101d91[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 16:42:23 2023 +0330
+
+    updated the views: added 2 class and a router to see if a user is creator or not so he can change it or not
+
+[33mcommit 5faa2ec55e774ab421cb9faaff74d80012c7f639[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 14:29:56 2023 +0330
+
+    set the created_at and creator field in GroupModel to editable=Flase
+
+[33mcommit 0d9d27341484db147c74b996794afcd9129bf73f[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 14:24:12 2023 +0330
+
+    created 2 serializers. one for creating a group and one for details of it
+
+[33mcommit df80a2ec1c52123ab806900310fffc6ca3f816ac[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 14:17:32 2023 +0330
+
+    changes in GroupModel
+
+[33mcommit b970d93482fe3e94d1e0992df076ebdff1544449[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 13:46:36 2023 +0330
+
+    made another field to group to be private or public. also sest the inviter field in MembershipModel to null=True
+
+[33mcommit fb68aa1f84049a500d9925d835475a1a49234eb1[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 13:24:31 2023 +0330
+
+    added 2 model classes. Group and Membership
+
+[33mcommit 1792a869c343442e1dea4145c0cefd3be7c7f1c5[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Sat Dec 9 12:58:42 2023 +0330
+
+    organzied the views
+
+[33mcommit 2e635a17137f7bb5ad0b6b765496fc3fd42ad4ee[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Fri Dec 8 19:32:40 2023 +0330
+
+    leaving this branch
+
+[33mcommit 0836798b881537a8c98701eb5915009d0023221b[m
+Merge: acfae9e 1de2eb7
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Fri Dec 8 14:24:50 2023 +0330
+
+    fixing conflicts betwwen userprofileedit and login
+
+[33mcommit acfae9e161f4a651c47d05d054c4a124902a7312[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Fri Dec 8 14:15:35 2023 +0330
+
+    minor change
+
+[33mcommit 1de2eb7075d8451bd060845ba351f0ca4e6a52d8[m[33m ([m[1;32mlogin[m[33m)[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Fri Dec 8 14:06:28 2023 +0330
+
+    log in view was successfull
+
+[33mcommit c9b7c8d45b4254f3a62759134571ec9dc2e63149[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Fri Dec 8 01:54:26 2023 +0330
+
+    added a the login urls
+
+[33mcommit f2c9dc6f2c8bb3dc0d2c1585d39ea7b7aef12c43[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Fri Dec 8 01:53:14 2023 +0330
+
+    added a LoginAPIView class
+
+[33mcommit d45b0a8327b846a70ccb46bba14b7591bf0ce1dc[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Fri Dec 8 01:43:30 2023 +0330
+
+    added auth classes to some views i think
+
+[33mcommit 9cc437dd3017b88fff35876ef07d00c052231ae9[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Fri Dec 8 01:34:41 2023 +0330
+
+    added auth classes to some views
+
+[33mcommit d26982f75e0198d5bf16e68b0d8bea233364f6e3[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Fri Dec 8 01:10:43 2023 +0330
+
+    changed the urls to match the views
+
+[33mcommit 0ff72c96e1c800e596edcc7f054a01914faa7d8e[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Fri Dec 8 01:07:25 2023 +0330
+
+    changed the views and added a UserProfileEditView class
+
+[33mcommit 5b63d21b104e6ca64925fcd4abec2a8504106884[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Thu Dec 7 22:59:03 2023 +0330
+
+    fixed a minor problem in creating a user with profile picture. user=user
+
+[33mcommit 29f321c4e7bab99cb8896004a3d504cd13593d91[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Thu Dec 7 22:46:58 2023 +0330
+
+    changed the ImageField in ProfilePictureModel and set it to 'blank=true'
+
+[33mcommit e4ee05c77d8153dc46adab8c9d31472216c1809a[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Thu Dec 7 22:43:42 2023 +0330
+
+    updated the urls
+
+[33mcommit cdf81d935092ce3df2d53439be18df69c4e1efc3[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Thu Dec 7 22:38:16 2023 +0330
+
+    updated the views and created UserCreateView
+
+[33mcommit d3fd0b5530d1b3014a608853eee8d45916e9bd8a[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Thu Dec 7 22:33:43 2023 +0330
+
+    created serializers
+
+[33mcommit 97eb4241ec7f97c70cd8b37485769e2cc59031c8[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Thu Dec 7 22:18:25 2023 +0330
+
+    created ProfilePictureModel.
+
+[33mcommit c10c327ebc01a7d414cd762dbedcc2b50656b5e3[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 22:28:19 2023 +0330
+
+    minor change in ordering in TaskModel
+
+[33mcommit 59844ca6676259550a7884819cc0abc5b360005e[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 22:24:33 2023 +0330
+
+    updated the TaskModel with 'null=True' for date and about
+
+[33mcommit 084a7d47b0f5ee9462e69cd6488d3e3efcf393d5[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 22:22:38 2023 +0330
+
+    updated the urls for tasks/create
+
+[33mcommit 39f8d5104766310fa5740e8fbfc16add29193688[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 22:18:47 2023 +0330
+
+    changed the views and seperated ListView and CreatView
+
+[33mcommit 0e05221182b6b3adfbc03eaf31d99712d0c4254c[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 22:09:05 2023 +0330
+
+    changed the serializer of the RUDView from TaskSerializer to AboutSerializer
+
+[33mcommit 5541eb7445efcbb36e159321d7abed7f173016a2[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 22:04:25 2023 +0330
+
+    minor change in 'about' field if TaskModel: deleted the 'null=true'and set a default value. this is because I couldn't see the field in RUDView
+
+[33mcommit f08ada88f0eae3273d82374bf3ccb0cd772a969b[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 22:00:28 2023 +0330
+
+    made some changes to the serializers
+
+[33mcommit 516d958f443dac71da6ddb0b1252f9cff82d3cb2[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 21:49:27 2023 +0330
+
+    created a new serializer class called AboutSerializer, changed the fields of the TasksSerializer, made migrations
+
+[33mcommit 476dd44872964a8cf90497f85da0ea3452ed5b8f[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 21:43:48 2023 +0330
+
+    created a new field called about in TaskModel without migrations
+
+[33mcommit f6b8ceb4f8e4ba90f1835fdf9715c8aec61e2228[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 21:41:53 2023 +0330
+
+    created NestedSerializer branch to try out the idea
+
+[33mcommit 986246e77e66705dacfc2066097ccd3d882bd656[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 16:28:52 2023 +0330
+
+    rdftodo.urls hase been updated. another migration has been made since I had forgot to migrate after changing the models name.
+
+[33mcommit fe72d58858054b8cd9691716cbe385045784ab58[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 16:24:00 2023 +0330
+
+    todo.urls has been written
+
+[33mcommit 909998769c60b1d19526d16a0390736a967227bf[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 16:15:36 2023 +0330
+
+    Task Model updated by name and added 'done' field to it. migrations is also done
+
+[33mcommit 4e091abd7eaf8c98bb50fb6665c5361e45f2989b[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 16:10:42 2023 +0330
+
+    TaskListView and TaskDetailView has been created
+
+[33mcommit 9dbaee409c0c5401010a214e3c12931e8fe43887[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 15:03:08 2023 +0330
+
+    TasksSerializer Created
+
+[33mcommit 52b4ef8fa4c7ec41da59bf89fc7c7ecd1d24d23a[m
+Author: Mojtaba <mji741258963@gmail.com>
+Date:   Wed Dec 6 14:50:35 2023 +0330
+
+    regular setups, created tasks model and made migrations

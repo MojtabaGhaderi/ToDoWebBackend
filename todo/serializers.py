@@ -14,11 +14,10 @@ class ProfileUserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileDetailSerializer(serializers.ModelSerializer):
-    profile_picture = ProfileUserSerializer()
 
     class Meta:
-        model = User
-        fields = ['username', 'profile_picture']
+        model = ProfilePictureModel
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -20,11 +20,12 @@ urlpatterns = [
     path('profile/', views.UserProfileEditView.as_view(), name='profile'),
 
     path('friends', views.FriendListView.as_view(), name='friend_list'),
-    path('friend-request', views.FriendRequestCreate.as_view(), name='friend_request'),
-    path('friend-request-response', views.FriendRequestResponse.as_view(), name='friend_request_response'),
+    path('friend-request/', views.FriendRequestCreate.as_view(), name='friend_request'),
+    path('friend-request-response/<int:pk>/', views.FriendRequestResponse.as_view(), name='friend_request_response'),
     path('friends/edit', views.FriendListEdit.as_view(), name='Friend_edit'),
 
     path('login/', views.LoginAPIView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
 
     path('signup/', views.UserCreateView.as_view(), name='signup'),
 

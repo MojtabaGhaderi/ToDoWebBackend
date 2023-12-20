@@ -10,7 +10,7 @@ class IsSelf(BasePermission):
 
 class IsSelfFriendResponse(BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.reciever == request.user
+        return obj.receiver == request.user
 
 
 class GroupJoinInvitationResponsePermission(BasePermission):
@@ -25,9 +25,7 @@ class FriendListEditPermission(BasePermission):
 
 class IsGroupHead(BasePermission):
     def has_object_permission(self, request, view, obj):
-        group = obj.group
-        find_group = GroupModel.objects.filter(group=group)
-        return find_group.creator == request.user
+        return obj.creator == request.user
 
 
 class IsGroupAdmin(BasePermission):
@@ -42,3 +40,9 @@ class IsInGroup(BasePermission):
         group_id = view.kwargs.get('pk')
         user = request.user
         return GroupModel.objects.filter(id=group_id, members=user).exist()
+
+
+class IsTaskOwner(BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        return obj.creator == request.user
