@@ -13,10 +13,12 @@ urlpatterns = [
     path('group-send-invite', views.GroupSendInvitationView.as_view(), name='group-send-invite'),
     path('groups/<int:pk>/', views.group_router, name='group_router'),
     path('group/invitation', views.GroupJoinInvitationResponse.as_view(), name='group_invitation'),
-    path('group/reqtojoin/<int:pk>/', views.GroupJoinRequestResponse.as_view(), name='group_join_request'),
+    path('group-join-requests/<int:pk>/', views.GroupJoinRequests.as_view(), name='group_join_request'),
+    path('group-join-response/<int:pk>', views.GroupJoinRequestResponse.as_view(), name='group-join-response'),
     path('mygroups', views.UserGroupListView.as_view(), name='user_groups'),
+    path('grouptest/',views.JoinRequestTest.as_view(), name='grouptest'),# for test////////////
 
-    path('profile/<int:pk>',views.UserProfileDetailView.as_view(), name='profile_detail'),
+    path('profile/<int:pk>', views.UserProfileDetailView.as_view(), name='profile_detail'),
     path('profile/', views.UserProfileEditView.as_view(), name='profile'),
 
     path('friends', views.FriendListView.as_view(), name='friend_list'),

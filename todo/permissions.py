@@ -25,14 +25,28 @@ class FriendListEditPermission(BasePermission):
 
 class IsGroupHead(BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.creator == request.user
+        # group = obj.group
+        creator = obj.creator
+        return creator == request.user
 
 
 class IsGroupAdmin(BasePermission):
     def has_object_permission(self, request, view, obj):
         group = obj.group
-        find_group = GroupModel.objects.filter(group=group)
-        return find_group.admin == request.user
+        admins = group.admin
+        if admins is None:
+            return False
+        else:
+            return request.user in admins
+
+
+class IsGroupHeadOrAdmin(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return (
+            IsGroupHead().has_object_permission(request, view, obj)
+            or
+            IsGroupAdmin().has_object_permission(request,view, obj)
+        )
 
 
 class IsInGroup(BasePermission):

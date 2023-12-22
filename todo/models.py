@@ -82,11 +82,10 @@ class FriendRequestModel(models.Model):
 
 
 class JoinGroupRequestModel(models.Model):
-    invited = models.OneToOneField(User, on_delete=models.CASCADE)
-    invitor = models.OneToOneField(User, on_delete=models.CASCADE, related_name='invitor', null=True)
-    group = models.OneToOneField(GroupModel, on_delete=models.CASCADE)
+    invited = models.ForeignKey(User, on_delete=models.CASCADE)
+    invitor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invitations_sent', null=True)
+    group = models.ForeignKey(GroupModel, on_delete=models.CASCADE)
     sent_at = models.DateTimeField(auto_now_add=True)
     request_to_join = models.BooleanField(default=False, editable=False)
     invitation = models.BooleanField(default=False, editable=False)
-    accepted = models.BooleanField(default=None)
-
+    accepted = models.BooleanField(default=False)

@@ -88,7 +88,7 @@ class GroupJoinSerializer(serializers.ModelSerializer):
     class Meta:
         model = MembershipModel
         fields = ['user', 'invitor']
-        read_only_fields = ['user']
+        read_only_fields = ['user', 'invitor']
 
 
 class GroupJoinRequestsSerializer(serializers.ModelSerializer):
@@ -97,6 +97,11 @@ class GroupJoinRequestsSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('invited', 'invitor', 'group', 'sent_at', 'request_to_join', 'invitation')
 
+#this is for test////////
+class GroupJoinTest(serializers.ModelSerializer):
+    class Meta:
+        model = JoinGroupRequestModel
+        fields = '__all__'
 
 class TasksSerializer(serializers.ModelSerializer):
     class Meta:

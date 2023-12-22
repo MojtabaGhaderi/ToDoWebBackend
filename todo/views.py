@@ -5,6 +5,7 @@ from rest_framework.authentication import SessionAuthentication
 
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -17,7 +18,8 @@ from .serializers import (TasksSerializer, AboutSerializer,
                           ProfileUserSerializer, UserSerializer,
                           GroupCreateSerializer, GroupDetailSerializer, FriendRequestSerializer,
                           UserProfileDetailSerializer, FriendRequestResponseSerializer, FriendshipSerializer,
-                          TaskGroupSerializer, GroupJoinRequestsSerializer, GroupJoinSerializer, MembershipSerializer)
+                          TaskGroupSerializer, GroupJoinRequestsSerializer, GroupJoinSerializer, MembershipSerializer,
+                          GroupJoinTest)
 
 from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequestModel, FriendshipModel, \
     ProfilePictureModel
@@ -25,7 +27,7 @@ from .models import TasksModel, User, GroupModel, MembershipModel, FriendRequest
 from .models import TasksModel, User, GroupModel, MembershipModel, JoinGroupRequestModel
 from django.db.models import Q
 from .permissions import IsSelf, IsSelfFriendResponse, FriendListEditPermission, IsGroupAdmin, IsGroupHead, \
-    GroupJoinInvitationResponsePermission, IsInGroup, IsTaskOwner
+    GroupJoinInvitationResponsePermission, IsInGroup, IsTaskOwner, IsGroupHeadOrAdmin
 
 
 # //////////////////////////
@@ -166,19 +168,25 @@ class GroupJoinView(generics.CreateAPIView):
     serializer_class = GroupJoinSerializer
 
     def post(self, request, *args, **kwargs):
-        group_id = self.request.get('group_id')
+        group_id = self.request.data['group_id']
         group = GroupModel.objects.get(id=group_id)
         user = request.user
 
         if group.public:
-            membership = MembershipModel(user=user, group=group)
-            membership.save()
-            return Response({'detail': 'you are now a member of this group.'})
+            membership, created = MembershipModel.objects.get_or_create(user=user, group=group)
+            if created:
+                return Response({'detail': 'you are already in this group.'})
+            else:
+                return Response({'detail': 'you are now a member of this group.'})
 
         else:
-            join_group_request = JoinGroupRequestModel(invited=user, group=group, request_to_join=True)
-            join_group_request.save()
-            return Response({'detail': 'your join request has been sent and now is pending.'})
+            join_group_request, created = JoinGroupRequestModel.objects.get_or_create(invited=user,
+                                                                                      group=group,
+                                                                                      request_to_join=True)
+            if created:
+                return Response({'detail': 'your join request has been sent and now is pending.'})
+            else:
+                return Response({'detail': 'Your join request has already sent.'})
 
 
 class GroupSendInvitationView(generics.CreateAPIView):
@@ -198,21 +206,36 @@ class GroupSendInvitationView(generics.CreateAPIView):
         invitation.save()
 
 
-class GroupJoinRequestResponse(generics.RetrieveUpdateDestroyAPIView):
+class GroupJoinRequests(generics.ListAPIView):
     serializer_class = GroupJoinRequestsSerializer
-    # lookup_field = 'id'
-    permission_classes = [IsGroupAdmin, IsGroupHead]
+
+    permission_classes = [IsGroupHead, IsGroupAdmin]
     authentication_classes = [SessionAuthentication]
 
     def get_queryset(self):
-        group_id = self.request.data.get('id')
-        return JoinGroupRequestModel.objects.filter(group_id=group_id)
+        group_id = self.kwargs.get('pk')  # Accessing the pk from URL
+        group = get_object_or_404(GroupModel, id=group_id)
+        return JoinGroupRequestModel.objects.filter(group=group)
+
+
+class GroupJoinRequestResponse(generics.RetrieveUpdateDestroyAPIView):
+
+    serializer_class = GroupJoinRequestsSerializer
+
+    permission_classes = [IsGroupHeadOrAdmin]
+    authentication_classes = [SessionAuthentication]
+
+    def get_queryset(self):
+        id = self.kwargs.get('pk')  # Accessing the pk from URL
+        return JoinGroupRequestModel.objects.filter(id=id)
 
     def perform_update(self, serializer):
         accepted = serializer.validated_data.get('accepted', None)
-        group = serializer.validated_data.get('group', None)
-        invited = serializer.validated_data.get('invited', None)
+        join_request = self.get_object()
+        group = join_request.group
+        invited = join_request.invited
         if accepted is not None and accepted:
+
             membership = MembershipModel(user=invited, group=group)
             membership.save()
             join_request = JoinGroupRequestModel.objects.filter(group=group, invited=invited)
@@ -336,4 +359,7 @@ class GroupTaskListView(generics.ListAPIView):
 
 
 
-
+#this is for test///////////
+class JoinRequestTest(generics.ListAPIView):
+    serializer_class = GroupJoinTest
+    queryset = JoinGroupRequestModel.objects.all()
