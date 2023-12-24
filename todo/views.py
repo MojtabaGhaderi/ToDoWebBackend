@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
 
 from rest_framework.exceptions import ValidationError
@@ -194,16 +194,17 @@ class GroupSendInvitationView(generics.CreateAPIView):
     permission_classes = [IsGroupAdmin, IsGroupHead]
 
     def post(self, request, *args, **kwargs):
-        group_id = self.request.get('group_id')
+        group_id = self.request.data['group_id']
         group = GroupModel.objects.get(id=group_id)
 
-        user_id = self.request.get('user_id')
+        user_id = self.request.data['user_id']
         user = User.objects.get(id=user_id)
 
-        invitor = request.user
+        invitor = self.request.user
 
         invitation = JoinGroupRequestModel(invited=user, group=group, invitor=invitor, invitation=True)
         invitation.save()
+        return Response("Invitation created successfully.", status=status.HTTP_201_CREATED)
 
 
 class GroupJoinRequests(generics.ListAPIView):
@@ -245,29 +246,35 @@ class GroupJoinRequestResponse(generics.RetrieveUpdateDestroyAPIView):
             join_request.delete()
 
 
-class GroupJoinInvitationResponse(generics.RetrieveUpdateDestroyAPIView):
+class GroupInvitationListView(generics.ListAPIView):
     serializer_class = GroupJoinRequestsSerializer
-    permission_classes = [GroupJoinInvitationResponsePermission]
-    lookup_field = 'id'
 
     def get_queryset(self):
         user = self.request.user
-        return JoinGroupRequestModel.objects.filter(invited=user)
+        return JoinGroupRequestModel.objects.filter(invited=user, invitation=True)
 
+
+class GroupJoinInvitationResponse(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = GroupJoinRequestsSerializer
+    permission_classes = [GroupJoinInvitationResponsePermission]
+    queryset = JoinGroupRequestModel
+    # lookup_field = 'id'
+
+    @transaction.atomic
     def perform_update(self, serializer):
-        group = serializer.validated_data.get('group', None)
-        invited = serializer.validated_data.get('invited', None)
-        invitor = serializer.validated_data.get('invitor', None)
-        accepted = serializer.validated_data.get('accepted', None)
+        pk = self.kwargs['pk']
+        instance = serializer.save()
+        group = instance.group
+        accepted = instance.accepted
+        invited = instance.invited
+        invitor = instance.invitor
 
-        if accepted is not None and accepted:
+        if accepted:
             membership = MembershipModel(user=invited, group=group, invitor=invitor)
             membership.save()
-            join_request = JoinGroupRequestModel.objects.filter(group=group, invited=invited, invitor=invitor)
-            join_request.delete()
-        elif accepted is False:
-            join_request = JoinGroupRequestModel.objects.filter(group=group, invited=invited, invitor=invitor)
-            join_request.delete()
+            instance.delete()
+        else:
+            instance.delete()
 
 
 class GroupUpdateView(generics.RetrieveUpdateAPIView):
@@ -276,17 +283,6 @@ class GroupUpdateView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsGroupHead, IsAuthenticated]
 
 
-@api_view(['GET'])
-def group_router(request: Request, *args, **kwargs):
-    django_request = HttpRequest()
-    django_request.method = request.method
-    django_request.user = request.user
-
-    group = GroupModel.objects.get(pk=kwargs['pk'])
-    if group.creator == request.user:
-        return GroupUpdateView.as_view()(django_request, *args, **kwargs)
-    else:
-        return GroupDetailView.as_view()(django_request, *args, **kwargs)
 # //////////////////////
 # Tasks here:
 # //////////////////////
@@ -346,14 +342,14 @@ class FriendTaskListView(generics.ListAPIView):
 
 
 class GroupTaskListView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated, IsInGroup]
+    permission_classes = [IsAuthenticated]
     serializer_class = AboutSerializer
 
     def get_queryset(self):
         user_id = self.request.user.id
         user = User.objects.get(id=user_id)
         memberships = MembershipModel.objects.filter(user=user)
-        groups = [memberships.group for membership in memberships]
+        groups = [membership.group for membership in memberships]
         return TasksModel.objects.filter(in_group__in=groups, status='G')
 
 

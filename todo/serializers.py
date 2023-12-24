@@ -87,7 +87,7 @@ class MembershipSerializer(serializers.ModelSerializer):
 class GroupJoinSerializer(serializers.ModelSerializer):
     class Meta:
         model = MembershipModel
-        fields = ['user', 'invitor']
+        fields = ['user', 'invitor', 'group', 'accepted', 'group']
         read_only_fields = ['user', 'invitor']
 
 

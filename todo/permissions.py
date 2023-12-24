@@ -45,7 +45,7 @@ class IsGroupHeadOrAdmin(BasePermission):
         return (
             IsGroupHead().has_object_permission(request, view, obj)
             or
-            IsGroupAdmin().has_object_permission(request,view, obj)
+            IsGroupAdmin().has_object_permission(request, view, obj)
         )
 
 
